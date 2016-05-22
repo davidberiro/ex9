@@ -1,0 +1,56 @@
+class Snake{
+        
+    field int sLength;
+    field int headX;
+    field int headY;
+    field Array player;   
+    
+    /**
+    * constructor for the class
+    */
+    constructor Snake new(int length){
+        let sLength = length;
+        let player = Array.new(50);
+        do initSnake();
+        return this;
+    }
+
+
+    /**
+    * init the snake to the start point
+    */
+    method void initSnake() {
+        var int i;
+        var int j;
+        let i = 0;
+        let j = 0;
+        while (i < (sLength * 2) - 1){
+            player[i] = 256;
+            player[i+1] = 125 + j;
+            i = i + 2;
+            j = j + 1;
+        }
+        let headX = i - 2;
+        let headY = i - 1;
+        do draw(headX, headY, true)
+    }
+    
+    
+    /**
+    * drew the player in the screen
+    */    
+    method void draw(int x, int y, boolean color) {
+	    do Screen.setColor(color);
+	    if ((x < 0) | (x > 500)){
+	        do Output.printString("You're Out!!!");
+	    }
+	    if  ((y < 0) | (y > 245)) {
+	        do Output.printString("You're Out!!!");
+	    }
+	    do Screen.drawPixel(x, y);
+	    return;
+    }
+    
+    
+}
+    
