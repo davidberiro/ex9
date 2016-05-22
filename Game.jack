@@ -9,15 +9,20 @@ class Game {
 field Snake snake;
 field int length;
 field int height;
-field int score;
+field int score, foodNumber;
+field int direction;
+field boolean collided;
+field Array foodX, foodY;
 
 constructor Game new() {
     let score = 0;
-    //let snake = Snake.new();
-
+    let snake = Snake.new();
+    let direction = 0;
+    let foodX = Array.new(6);
+    let foodY = Array.new(6);
+    let foodNumber = 0;
+    do initFood();
     do printStartScreen();
-    do run();
-
     return this;
 
 }
@@ -28,16 +33,18 @@ constructor Game new() {
 method void run() {
     var char key;
     var boolean exit;
-    var int direction;
-
     let key = 0;
-    let direction = 0;
 
     while (true) {
-        do printScore();
-
         while (key = 0) {
             let key = Keyboard.keyPressed();
+            let collided = snake.moveSnake(direction, foodX[foodNumber], foodY[foodNumber]);
+            do ateFood();
+
+            if (collided) {
+                do GameOver();
+                return;
+            }
         }
 
         //turning right
@@ -69,15 +76,52 @@ method void run() {
         }
 
 
+
+        while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            let collided = snake.moveSnake(direction, foodX[foodNumber], foodY[foodNumber]);
+            if (collided) {
+                do GameOver();
+                return;
+            }
+        }
+
+
     }
 
     return;
-
-
-
-
-
 }
+
+    method void ateFood() {
+        var int x, y;
+        let x = snake.returnX();
+        let y = snake.returnY();
+
+        if ((Math.abs(x-foodX[foodNumber]) < 5) & (Math.abs(y-foodY[foodNumber]) < 5)) {
+            do snake.grow(direction);
+            let foodNumber = foodNumber + 1;
+            do increaseScore();
+        }
+        return;
+    }
+
+    method void initFood() {
+        let foodX[0] = 55;
+        let foodX[1] = 131;
+        let foodX[2] = 123;
+        let foodX[3] = 58;
+        let foodX[4] = 52;
+        let foodX[5] = 17;
+
+        let foodY[0] = 65;
+        let foodY[1] = 111;
+        let foodY[2] = 102;
+        let foodY[3] = 68;
+        let foodY[4] = 78;
+        let foodY[5] = 66;
+
+        return;
+    }
 
 method void printStartScreen() {
     var char key;
@@ -97,18 +141,6 @@ method void printStartScreen() {
     return;
 }
 
-method void dispose() {
-
-
-    return;
-}
-
-method void printScore() {
-    do Output.moveCursor(0,0);
-    do Output.printString("Score:");
-    do Output.printInt(score);
-    return;
-}
 
 method void increaseScore() {
     let score = score + 1;
@@ -116,7 +148,7 @@ method void increaseScore() {
 }
 
 method void GameOver() {
-    do Screen.ClearScreen();
+    do Screen.clearScreen();
     do Output.moveCursor(0, 12);
     do Output.printString("GAME OVER!");
     do Output.moveCursor(10, 12);
@@ -124,6 +156,13 @@ method void GameOver() {
     do Output.printInt(score);
     return;
 }
+
+method void dispose() {
+	do snake.disposeSnake();
+	do Memory.deAlloc(this);
+
+	return;
+	}
 
 
 }
