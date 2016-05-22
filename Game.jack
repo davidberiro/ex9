@@ -1,0 +1,129 @@
+/**
+*
+*
+*
+*/
+
+class Game {
+
+field Snake snake;
+field int length;
+field int height;
+field int score;
+
+constructor Game new() {
+    let score = 0;
+    //let snake = Snake.new();
+
+    do printStartScreen();
+    do run();
+
+    return this;
+
+}
+
+/**
+*the run method, 0 is right, 2 is left, up is 3, down is 1
+*/
+method void run() {
+    var char key;
+    var boolean exit;
+    var int direction;
+
+    let key = 0;
+    let direction = 0;
+
+    while (true) {
+        do printScore();
+
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+
+        //turning right
+        if (key = 132) {
+            if (~(direction = 2)) {
+                let direction = 0;
+            }
+        }
+
+        //turning down
+        if (key = 133) {
+            if (~(direction = 3)) {
+                let direction = 1;
+            }
+        }
+
+        //turning up
+        if (key = 131) {
+            if (~(direction = 1)) {
+                let direction = 3;
+            }
+        }
+
+        //turning left
+        if (key = 130) {
+            if (~(direction = 0)) {
+                let direction = 2;
+            }
+        }
+
+
+    }
+
+    return;
+
+
+
+
+
+}
+
+method void printStartScreen() {
+    var char key;
+
+    do Output.moveCursor(0, 13);
+    do Output.printString("Welcome to David and Omers game of SNAKE!");
+    do Output.moveCursor(10, 13);
+    do Output.printString("To start the game, hit SPACE");
+
+    let key = Keyboard.keyPressed();
+
+    while (~(key = 32)) {
+        let key = Keyboard.keyPressed();
+    }
+    do Screen.clearScreen();
+
+    return;
+}
+
+method void dispose() {
+
+
+    return;
+}
+
+method void printScore() {
+    do Output.moveCursor(0,0);
+    do Output.printString("Score:");
+    do Output.printInt(score);
+    return;
+}
+
+method void increaseScore() {
+    let score = score + 1;
+    return;
+}
+
+method void GameOver() {
+    do Screen.ClearScreen();
+    do Output.moveCursor(0, 12);
+    do Output.printString("GAME OVER!");
+    do Output.moveCursor(10, 12);
+    do Output.printString("Your score was:");
+    do Output.printInt(score);
+    return;
+}
+
+
+}
