@@ -101,6 +101,12 @@ method void run() {
             do snake.grow(direction);
             let foodNumber = foodNumber + 1;
             do increaseScore();
+            if (score = 4) {
+                do Output.moveCursor(0,10);
+                do Output.printString("Congratulations, you win!");
+                do Sys.wait(500);
+                do Sys.halt();
+            }
         }
         return;
     }
